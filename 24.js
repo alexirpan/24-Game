@@ -94,10 +94,14 @@ Deck.prototype.deal = function() {
             }
         }
     }
-    return "NOT DOABLE";
+    this.done = true;
 }
 
-var d = new Deck();
-for (var i = 0; i < 13; i++) {
-    console.log(d.deal());
+Deck.prototype.gameDone = function() {
+    return this.done;
+}
+
+// on import return deck engine
+var deckMaker = module.exports = function() {
+    return new Deck();
 }
