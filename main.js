@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-var debug = true;
+var debug = false;
 app.use(express.static(__dirname + '/static'));
 app.use(express.urlencoded());
 var mustache = require('mustache');
