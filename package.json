@@ -1,0 +1,24 @@
+{
+  "name": "24-game",
+  "version": "0.0.0",
+  "description": "\"24 game in JS\"",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexirpan/24-Game.git"
+  },
+  "author": "Alex Irpan",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/alexirpan/24-Game/issues"
+  },
+  "homepage": "https://github.com/alexirpan/24-Game",
+  "dependencies": {
+    "mustache": "~0.8.1",
+    "mathjs": "~0.18.1",
+    "express": "~3.4.8"
+  }
+}

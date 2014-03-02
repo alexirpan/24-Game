@@ -9,6 +9,7 @@ var fs = require('fs');
 var deck = decks();
 var deal = deck.deal(); // should always exist
 var score = 0;
+var message = "";
 // Maybe using request-response instead of a socket is a bad idea
 
 app.get('/', function (req, res) {
@@ -18,8 +19,11 @@ app.get('/', function (req, res) {
         "card2": deal[1],
         "card3": deal[2],
         "card4": deal[3],
-        "score": score
+        "score": score,
+        "message": message
     });
+    // reset message after first display
+    message = "";
     res.send(output);
 });
 
@@ -40,8 +44,8 @@ function validated (expression) {
     var counts = [0,0,0,0,0,0,0,0,0,0];
     var truecounts = [0,0,0,0,0,0,0,0,0,0];
     for (var i = 0; i < deal.length; i++) {
-        truecounts[i % 10] += 1;
-        if (i > 10) {
+        truecounts[deal[i] % 10] += 1;
+        if (deal[i] >= 10) {
             truecounts[1] += 1;
         }
     }
@@ -67,8 +71,8 @@ app.post('/verify', function (req, res) {
     var expression = req.body.expression;
     if (!validated(expression)) {
         console.log("Failed validation");
-    }
-    if (validated(expression) && correctSum(expression)) {
+        message = "Expression did not validate (did you use every number once? Is your expression correct?)";
+    } else if (validated(expression) && correctSum(expression)) {
         console.log("Correct, dealing new set");
         score += 1
         deal = deck.deal();
@@ -77,6 +81,8 @@ app.post('/verify', function (req, res) {
             deck = decks();
             deal = deck.deal();
         }
+    } else {
+        message = "Sum is not 24";
     }
     res.redirect("/");
 });
