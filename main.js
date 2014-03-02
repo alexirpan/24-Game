@@ -8,6 +8,7 @@ var fs = require('fs');
 
 var deck = decks();
 var deal = deck.deal(); // should always exist
+var score = 0;
 // Maybe using request-response instead of a socket is a bad idea
 
 app.get('/', function (req, res) {
@@ -17,6 +18,7 @@ app.get('/', function (req, res) {
         "card2": deal[1],
         "card3": deal[2],
         "card4": deal[3],
+        "score": score
     });
     res.send(output);
 });
@@ -33,11 +35,42 @@ function correctSum (expression) {
     }
 }
 
+function validated (expression) {
+    // TODO actually make this work right and not be stupid
+    var counts = [0,0,0,0,0,0,0,0,0,0];
+    var truecounts = [0,0,0,0,0,0,0,0,0,0];
+    for (var i = 0; i < deal.length; i++) {
+        truecounts[i % 10] += 1;
+        if (i > 10) {
+            truecounts[1] += 1;
+        }
+    }
+    var t = "";
+    for (var i = 0; i < expression.length; i++) {
+        try {
+            var t = parseInt(expression[i], 10);
+            counts[t] += 1;
+        } catch (e) {
+            return false;
+        }
+    }
+    for (var i = 0; i < 10; i++) {
+        if (counts[i] !== truecounts[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
 app.post('/verify', function (req, res) {
     // assume this works (such awful, much fail)
     var expression = req.body.expression;
-    if (correctSum(expression)) {
+    if (!validated(expression)) {
+        console.log("Failed validation");
+    }
+    if (validated(expression) && correctSum(expression)) {
         console.log("Correct, dealing new set");
+        score += 1
         deal = deck.deal();
         if (deal === undefined) {
             // happens only when deck is out
