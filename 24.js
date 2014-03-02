@@ -88,7 +88,8 @@ Deck.prototype.deal = function() {
                         var card2 = this.cards.splice(j-1, 1)[0];
                         var card3 = this.cards.splice(k-2, 1)[0];
                         var card4 = this.cards.splice(l-3, 1)[0];
-                        return [card1, card2, card3, card4];
+                        this.prevDeal = [card1, card2, card3, card4];
+                        return this.prevDeal;
                     }
                 }
             }
