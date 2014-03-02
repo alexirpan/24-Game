@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var debug = true;
 app.use(express.static(__dirname + '/static'));
 app.use(express.urlencoded());
 var mustache = require('mustache');
@@ -87,5 +88,9 @@ app.post('/verify', function (req, res) {
     res.redirect("/");
 });
 
-app.listen(3000);
-console.log("Server running on port 3000");
+if (debug) {
+    app.listen(3000);
+} else {
+    app.listen(process.env.PORT);
+}
+console.log("Server running");
